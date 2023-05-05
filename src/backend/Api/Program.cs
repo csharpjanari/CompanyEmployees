@@ -37,9 +37,7 @@ var app = builder.Build();
     app.ConfigureExceptionHandler(logger);
 
     if (app.Environment.IsProduction())
-        app.UseHsts();
-
-    app.UseHttpsRedirection();
+        app.UseHsts();  
 
     app.UseStaticFiles();
 
