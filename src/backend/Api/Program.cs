@@ -2,6 +2,7 @@ using Api.Extensions;
 using Contracts;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
+using Presentation.ActionFilters;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -14,6 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.ConfigureSqlContext(builder.Configuration);
     builder.Services.AddAutoMapper(typeof(Program));
 
+    builder.Services.AddScoped<ValidationFilterAttribute>();
     builder.Services.AddControllers(config =>
     {
         config.RespectBrowserAcceptHeader = true;
