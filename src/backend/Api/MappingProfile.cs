@@ -2,7 +2,7 @@ using AutoMapper;
 using Entities.Models;
 using Shared.DataTransferObjects;
 
-namespace CompanyEmployees;
+namespace Api;
 
 public class MappingProfile : Profile
 {

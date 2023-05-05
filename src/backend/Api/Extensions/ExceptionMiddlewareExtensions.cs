@@ -4,7 +4,7 @@ using Entities.Exceptions.BadRequest;
 using Entities.Exceptions.NotFound;
 using Microsoft.AspNetCore.Diagnostics;
 
-namespace CompanyEmployees.Extensions;
+namespace Api.Extensions;
 
 public static class ExceptionMiddlewareExtensions
 {

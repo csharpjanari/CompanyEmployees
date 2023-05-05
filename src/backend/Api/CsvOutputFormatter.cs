@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Net.Http.Headers;
 using Shared.DataTransferObjects;
 
-namespace CompanyEmployee;
+namespace Api;
 
 public class CsvOutputFormatter : TextOutputFormatter
 {

@@ -1,4 +1,4 @@
-using CompanyEmployee;
+using Api;
 using Contracts;
 using LoggerService;
 using Microsoft.EntityFrameworkCore;
@@ -6,7 +6,7 @@ using Repository;
 using Service;
 using Service.Contracts;
 
-namespace CompanyEmployees.Extensions;
+namespace Api.Extensions;
 
 public static class ServiceExtensions
 {

@@ -1,4 +1,4 @@
-using CompanyEmployees.Extensions;
+using Api.Extensions;
 using Contracts;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
