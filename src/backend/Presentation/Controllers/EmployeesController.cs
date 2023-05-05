@@ -60,6 +60,9 @@ public class EmployeesController : ControllerBase
         if (employee is null)
             return BadRequest("EmployeeForUpdateDto object is null");
 
+        if (!ModelState.IsValid)
+            return UnprocessableEntity(ModelState);
+
         _service.EmployeeService.UpdateEmployeeForCompany(companyId, id, employee,
             compTrackChanges: false, empTrackChanges: true);
 
