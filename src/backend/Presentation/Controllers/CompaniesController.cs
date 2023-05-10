@@ -30,6 +30,32 @@ public class CompaniesController : ControllerBase
         return Ok(company);
     }
 
+    [HttpPost]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
+    public async Task<IActionResult> CreateCompany([FromBody] CompanyForCreationDto company)
+    {
+        var createdCompany = await _service.CompanyService.CreateCompanyAsync(company);
+        return CreatedAtRoute("CompanyById", new { id = createdCompany.Id }, createdCompany);
+    }
+
+    
+    [HttpPut("{id:guid}")]
+    [ServiceFilter(typeof(ValidationFilterAttribute))]
+    public async Task<IActionResult> UpdateCompany(Guid id, [FromBody] CompanyForUpdateDto companyForUpdateDto)
+    {
+        await _service.CompanyService.UpdateCompanyAsync(id, companyForUpdateDto, trackChanges: true);
+        return NoContent(); 
+    }
+
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteCompany(Guid id)
+    {
+        await _service.CompanyService.DeleteCompanyAsync(id, trackChanges: false);
+        return NoContent();
+    }
+
+    // Collection Endpoits
 
     [HttpGet("collection/({ids})", Name = "CompanyCollection")]
     public async Task<IActionResult> CompanyCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))]
@@ -39,29 +65,11 @@ public class CompaniesController : ControllerBase
         return Ok(companies);
     }
 
-
     [HttpPost("collection")]
     public async Task<IActionResult> CreateCompanyCollection([FromBody]
         IEnumerable<CompanyForCreationDto> companyCollection)
     {
         var result = await _service.CompanyService.CreateCompanyCollectionAsync(companyCollection);
         return CreatedAtRoute("CompanyCollection", new { result.ids }, result.companies);
-    }
-
-
-    [HttpPost]
-    [ServiceFilter(typeof(ValidationFilterAttribute))]
-    public async Task<IActionResult> CreateCompany([FromBody] CompanyForCreationDto company)
-    {
-        var createdCompany = await _service.CompanyService.CreateCompanyAsync(company);
-        return CreatedAtRoute("CompanyById", new { id = createdCompany.Id }, createdCompany);
-    }
-
-
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> DeleteCompany(Guid id)
-    {
-        await _service.CompanyService.DeleteCompanyAsync(id, trackChanges: false);
-        return NoContent();
     }
 }
