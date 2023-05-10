@@ -96,7 +96,7 @@ internal sealed class CompanyService : ICompanyService
         return (companies: companyCollectionToReturn, ids: ids);
     }
 
-    // GetCompany DRY
+    // Refactoring code repetition
     private async Task<Company> GetCompanyAndCheckIfItExists(Guid id, bool trackChanges)
     {
         var company = await _repository.Company.GetCompanyAsync(id, trackChanges);
