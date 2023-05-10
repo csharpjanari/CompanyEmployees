@@ -50,5 +50,4 @@ var app = builder.Build();
     app.MapControllers();
 
     app.Run();
-    ThreadStart ci for api..
 }
