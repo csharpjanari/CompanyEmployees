@@ -1,0 +1,28 @@
+name: ReactJS
+
+on:
+  push:
+    branches: ["master"]
+    paths:
+      - "**/frontend/**"
+  pull_request:
+    branches: ["master"]
+    paths: 
+      - "**/frontend/**"
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+      - name: Use Node.js 18.x.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18.x.x
+      - name: Install dependencies
+        run: cd src/frontend && npm install    
+        env:
+          CI: true
+      - name: Generate build
+        run: cd src/frontend && npm run build
