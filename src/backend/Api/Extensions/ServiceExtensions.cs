@@ -17,7 +17,8 @@ public static class ServiceExtensions
             {
                 builder.AllowAnyOrigin()
                     .AllowAnyMethod()
-                    .AllowAnyHeader();
+                    .AllowAnyHeader()
+                    .WithExposedHeaders("X-Pagination");
             });
         });
 
