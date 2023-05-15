@@ -2,6 +2,7 @@ namespace Shared.RequestFeatures;
 
 public abstract class RequestParameters
 {
+    // Paging
     const int maxPageSize = 50;
     public int PageNumber { get; set; } = 1;
 
@@ -18,5 +19,9 @@ public abstract class RequestParameters
         }
     }
 
+    // Sorting
     public string OrderBy { get; set; }
+
+    // Data Shaping
+    public string Fields { get; set; }
 }

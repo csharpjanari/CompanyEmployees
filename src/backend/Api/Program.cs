@@ -3,6 +3,8 @@ using Contracts;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 using Presentation.ActionFilters;
+using Service;
+using Shared.DataTransferObjects;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -16,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddAutoMapper(typeof(Program));
 
     builder.Services.AddScoped<ValidationFilterAttribute>();
+    builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
     builder.Services.AddControllers(config =>
     {
         config.RespectBrowserAcceptHeader = true;
