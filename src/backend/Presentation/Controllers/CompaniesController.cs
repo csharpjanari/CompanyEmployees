@@ -72,4 +72,12 @@ public class CompaniesController : ControllerBase
         var result = await _service.CompanyService.CreateCompanyCollectionAsync(companyCollection);
         return CreatedAtRoute("CompanyCollection", new { result.ids }, result.companies);
     }
+
+    // OPTIONS
+    [HttpOptions]
+    public IActionResult GetCompaniesOptions() 
+    {
+        Response.Headers.Add("Allow", "GET, OPTIONS, POST, PUT, DELETE");
+        return Ok();
+    }
 }
