@@ -16,6 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.ConfigureServiceManager();
     builder.Services.ConfigureSqlContext(builder.Configuration);
     builder.Services.ConfigureVersioning();
+    builder.Services.ConfigureResponseCaching();
     builder.Services.AddAutoMapper(typeof(Program));
 
     builder.Services.AddScoped<ValidationFilterAttribute>();
@@ -24,6 +25,7 @@ var builder = WebApplication.CreateBuilder(args);
     {
         config.RespectBrowserAcceptHeader = true;
         config.ReturnHttpNotAcceptable = true;
+        config.CacheProfiles.Add("120secondsDuration", new CacheProfile { Duration = 120 });
     }).AddXmlDataContractSerializerFormatters()
     .AddCustomCSVFormatter()
     .AddApplicationPart(typeof(Presentation.AssemblyReference).Assembly);
@@ -48,6 +50,8 @@ var app = builder.Build();
     app.UseStaticFiles();
 
     app.UseCors("CorsPolicy");
+
+    app.UseResponseCaching();
 
     app.UseAuthorization();
 
