@@ -5,15 +5,15 @@ using Service.Contracts;
 using Shared.DataTransferObjects;
 using Shared.RequestFeatures;
 
-namespace Presentation.Controllers;
+namespace Presentation.Controllers.V1;
 
 [Route("api/companies/{companyId}/employees")]
 [ApiController]
-public class EmployeesController : ControllerBase
+public class EmployeesV1Controller : ControllerBase
 {
     private readonly IServiceManager _service;
 
-    public EmployeesController(IServiceManager service) => _service = service;
+    public EmployeesV1Controller(IServiceManager service) => _service = service;
 
 
     [HttpGet]

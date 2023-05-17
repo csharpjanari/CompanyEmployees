@@ -4,15 +4,16 @@ using Service.Contracts;
 using Shared.DataTransferObjects;
 using Presentation.ActionFilters;
 
-namespace Presentation.Controllers;
+namespace Presentation.Controllers.V1;
 
+[ApiVersion("1.0")]
 [Route("api/companies")]
 [ApiController]
-public class CompaniesController : ControllerBase
+public class CompaniesV1Controller : ControllerBase
 {
     private readonly IServiceManager _service;
 
-    public CompaniesController(IServiceManager service) => _service = service;
+    public CompaniesV1Controller(IServiceManager service) => _service = service;
 
 
     [HttpGet]
