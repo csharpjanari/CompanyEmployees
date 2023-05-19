@@ -17,6 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.ConfigureSqlContext(builder.Configuration);
     builder.Services.ConfigureVersioning();
     builder.Services.ConfigureResponseCaching();
+    builder.Services.ConfigureHttpCacheHeaders();
     builder.Services.AddAutoMapper(typeof(Program));
 
     builder.Services.AddScoped<ValidationFilterAttribute>();
@@ -52,6 +53,8 @@ var app = builder.Build();
     app.UseCors("CorsPolicy");
 
     app.UseResponseCaching();
+
+    app.UseHttpCacheHeaders();
 
     app.UseAuthorization();
 

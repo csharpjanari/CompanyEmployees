@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.DataTransferObjects;
 using Presentation.ActionFilters;
+using Marvin.Cache.Headers;
 
 namespace Presentation.Controllers.V1;
 
@@ -25,7 +26,8 @@ public class CompaniesV1Controller : ControllerBase
 
 
     [HttpGet("{id:guid}", Name = "CompanyById")]
-    [ResponseCache(CacheProfileName = "120secondsDuration")]
+    [HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 60)]
+    [HttpCacheValidation(MustRevalidate = false)]
     public async Task<IActionResult> GetCompany(Guid id)
     {
         var company = await _service.CompanyService.GetCompanyAsync(id, trackChanges: false);
