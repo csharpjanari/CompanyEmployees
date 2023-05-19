@@ -1,4 +1,5 @@
 using Api.Extensions;
+using AspNetCoreRateLimit;
 using Contracts;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
@@ -19,6 +20,9 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.ConfigureResponseCaching();
     builder.Services.ConfigureHttpCacheHeaders();
     builder.Services.AddAutoMapper(typeof(Program));
+    builder.Services.AddMemoryCache();
+    builder.Services.ConfigureRateLimitingOptions();
+    builder.Services.AddHttpContextAccessor();
 
     builder.Services.AddScoped<ValidationFilterAttribute>();
     builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
@@ -49,6 +53,8 @@ var app = builder.Build();
         app.UseHsts();  
 
     app.UseStaticFiles();
+
+    app.UseIpRateLimiting();
 
     app.UseCors("CorsPolicy");
 
