@@ -25,6 +25,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddHttpContextAccessor();
     builder.Services.AddAuthentication();
     builder.Services.ConfigureIdentity();
+    builder.Services.ConfigureJWT(builder.Configuration);
 
     builder.Services.AddScoped<ValidationFilterAttribute>();
     builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
