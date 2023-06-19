@@ -4,6 +4,7 @@ using Service.Contracts;
 using Shared.DataTransferObjects;
 using Presentation.ActionFilters;
 using Marvin.Cache.Headers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Presentation.Controllers.V1;
 
@@ -18,6 +19,7 @@ public class CompaniesV1Controller : ControllerBase
 
 
     [HttpGet]
+    [Authorize(Roles = "Manager")]
     public async Task<IActionResult> GetCompanies()
     {
         var companies = await _service.CompanyService.GetAllCompaniesAsync(trackChanges: false);
@@ -42,13 +44,13 @@ public class CompaniesV1Controller : ControllerBase
         return CreatedAtRoute("CompanyById", new { id = createdCompany.Id }, createdCompany);
     }
 
-    
+
     [HttpPut("{id:guid}")]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
     public async Task<IActionResult> UpdateCompany(Guid id, [FromBody] CompanyForUpdateDto companyForUpdateDto)
     {
         await _service.CompanyService.UpdateCompanyAsync(id, companyForUpdateDto, trackChanges: true);
-        return NoContent(); 
+        return NoContent();
     }
 
 
@@ -79,7 +81,7 @@ public class CompaniesV1Controller : ControllerBase
 
     // OPTIONS
     [HttpOptions]
-    public IActionResult GetCompaniesOptions() 
+    public IActionResult GetCompaniesOptions()
     {
         Response.Headers.Add("Allow", "GET, OPTIONS, POST, PUT, DELETE");
         return Ok();
