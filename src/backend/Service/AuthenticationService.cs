@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using AutoMapper;
 using Contracts;
+using Entities.Exceptions.BadRequest;
 using Entities.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -75,6 +76,23 @@ public class AuthenticationService : IAuthenticationService
         return new TokenDto(accessToken, refreshToken);
     }
 
+    public async Task<TokenDto> RefreshToken(TokenDto tokenDto)
+    {
+        var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
+
+        var user = await _userManager.FindByNameAsync(principal.Identity.Name);
+        if (user == null || user.RefreshToken != tokenDto.RefreshToken ||
+            user.RefreshTokenExpiryTime <= DateTime.Now)
+        {
+            throw new RefreshTokenBadRequest();
+        }
+
+        _user = user;
+
+        return await CreateToken(populateExp: false);
+    }
+
+    // Private Methods
     private SigningCredentials GetSigningCredentials()
     {
         var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SECRET"));
@@ -126,7 +144,7 @@ public class AuthenticationService : IAuthenticationService
         }
     }
 
-    private ClaimsPrincipal GetClaimsPrincipalFromExpiredToken(string token)
+    private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
     {
         var jwtSettings = _configuration.GetSection("JwtSettings");
 
