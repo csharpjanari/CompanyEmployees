@@ -26,6 +26,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddAuthentication();
     builder.Services.ConfigureIdentity();
     builder.Services.ConfigureJWT(builder.Configuration);
+    builder.Services.AddJwtConfiguration(builder.Configuration);
 
     builder.Services.AddScoped<ValidationFilterAttribute>();
     builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
@@ -53,7 +54,7 @@ var app = builder.Build();
     app.ConfigureExceptionHandler(logger);
 
     if (app.Environment.IsProduction())
-        app.UseHsts();  
+        app.UseHsts();
 
     app.UseStaticFiles();
 
