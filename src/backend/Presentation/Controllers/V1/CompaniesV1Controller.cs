@@ -11,6 +11,7 @@ namespace Presentation.Controllers.V1;
 [ApiVersion("1.0")]
 [Route("api/companies")]
 [ApiController]
+[ApiExplorerSettings(GroupName = "v1")]
 public class CompaniesV1Controller : ControllerBase
 {
     private readonly IServiceManager _service;
