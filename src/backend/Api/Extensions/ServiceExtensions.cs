@@ -1,6 +1,7 @@
 using System.Text;
 using AspNetCoreRateLimit;
 using Contracts;
+using Entities.ConfigurationModels;
 using Entities.Models;
 using LoggerService;
 using Marvin.Cache.Headers;
@@ -51,7 +52,7 @@ public static class ServiceExtensions
 
     public static void ConfigureVersioning(this IServiceCollection services)
     {
-        services.AddApiVersioning(opt => 
+        services.AddApiVersioning(opt =>
         {
             opt.ReportApiVersions = true;
             opt.AssumeDefaultVersionWhenUnspecified = true;
@@ -68,7 +69,7 @@ public static class ServiceExtensions
         {
             expirationOpt.MaxAge = 65;
             expirationOpt.CacheLocation = CacheLocation.Private;
-        },(validationOpt) => 
+        }, (validationOpt) =>
         {
             validationOpt.MustRevalidate = true;
         });
@@ -109,15 +110,17 @@ public static class ServiceExtensions
 
     public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
     {
-        var jwtSettings = configuration.GetSection("JwtSettings");
+        var jwtConfiguration = new JwtConfiguration();
+        configuration.Bind(jwtConfiguration.Section, jwtConfiguration);
+
         var secretKey = Environment.GetEnvironmentVariable("SECRET");
 
-        services.AddAuthentication(opt => 
+        services.AddAuthentication(opt =>
         {
             opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         })
-        .AddJwtBearer(options => 
+        .AddJwtBearer(options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters
             {
@@ -126,8 +129,8 @@ public static class ServiceExtensions
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
 
-                ValidIssuer = jwtSettings["validIssuer"],
-                ValidAudience = jwtSettings["validAudience"],
+                ValidIssuer = jwtConfiguration.ValidIssuer,
+                ValidAudience = jwtConfiguration.ValidAudience,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
             };
         });
