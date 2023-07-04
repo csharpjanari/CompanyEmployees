@@ -27,6 +27,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.ConfigureIdentity();
     builder.Services.ConfigureJWT(builder.Configuration);
     builder.Services.AddJwtConfiguration(builder.Configuration);
+    builder.Services.ConfigureSwagger();
 
     builder.Services.AddScoped<ValidationFilterAttribute>();
     builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
@@ -50,6 +51,12 @@ LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nl
 
 var app = builder.Build();
 {
+    if (builder.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
     var logger = app.Services.GetRequiredService<ILoggerManager>();
     app.ConfigureExceptionHandler(logger);
 
