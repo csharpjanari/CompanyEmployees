@@ -18,7 +18,6 @@ public class CompaniesV1Controller : ControllerBase
 
     public CompaniesV1Controller(IServiceManager service) => _service = service;
 
-
     [HttpGet]
     [Authorize(Roles = "Manager")]
     public async Task<IActionResult> GetCompanies()
@@ -39,6 +38,9 @@ public class CompaniesV1Controller : ControllerBase
 
     [HttpPost]
     [ServiceFilter(typeof(ValidationFilterAttribute))]
+    [ProducesResponseType(201)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(422)]
     public async Task<IActionResult> CreateCompany([FromBody] CompanyForCreationDto company)
     {
         var createdCompany = await _service.CompanyService.CreateCompanyAsync(company);
