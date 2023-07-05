@@ -5,6 +5,8 @@ using Shared.DataTransferObjects;
 using Presentation.ActionFilters;
 using Marvin.Cache.Headers;
 using Microsoft.AspNetCore.Authorization;
+using Entities.Responses;
+using Presentation.Extensions;
 
 namespace Presentation.Controllers.V1;
 
@@ -12,17 +14,18 @@ namespace Presentation.Controllers.V1;
 [Route("api/companies")]
 [ApiController]
 [ApiExplorerSettings(GroupName = "v1")]
-public class CompaniesV1Controller : ControllerBase
+public class CompaniesV1Controller : ApiControllerBase
 {
     private readonly IServiceManager _service;
 
     public CompaniesV1Controller(IServiceManager service) => _service = service;
 
     [HttpGet]
-    [Authorize(Roles = "Manager")]
     public async Task<IActionResult> GetCompanies()
     {
-        var companies = await _service.CompanyService.GetAllCompaniesAsync(trackChanges: false);
+        var baseResult = await _service.CompanyService.GetAllCompaniesAsync(trackChanges: false);
+        var companies = baseResult.GetResult<IEnumerable<CompanyDto>>();
+
         return Ok(companies);
     }
 
@@ -32,7 +35,11 @@ public class CompaniesV1Controller : ControllerBase
     [HttpCacheValidation(MustRevalidate = false)]
     public async Task<IActionResult> GetCompany(Guid id)
     {
-        var company = await _service.CompanyService.GetCompanyAsync(id, trackChanges: false);
+        var baseResult = await _service.CompanyService.GetCompanyAsync(id, trackChanges: false);
+        if (!baseResult.Success)
+            return ProcessError(baseResult);
+
+        var company = baseResult.GetResult<CompanyDto>();
         return Ok(company);
     }
 

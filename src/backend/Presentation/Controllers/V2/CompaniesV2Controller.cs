@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Extensions;
 using Service.Contracts;
+using Shared.DataTransferObjects;
 
 namespace Presentation.Controllers.V2;
 
@@ -7,7 +9,7 @@ namespace Presentation.Controllers.V2;
 [Route("api/companies")]
 [ApiController]
 [ApiExplorerSettings(GroupName = "v2")]
-public class CompaniesV2Controller : ControllerBase
+public class CompaniesV2Controller : ApiControllerBase
 {
     private readonly IServiceManager _service;
 
@@ -16,10 +18,10 @@ public class CompaniesV2Controller : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetCompanies()
     {
-        var companies = await _service.CompanyService
+        var baseResult = await _service.CompanyService
             .GetAllCompaniesAsync(trackChanges: false);
 
-        var companiesV2 = companies.Select(x => $"{x.Name} V2");
+        var companiesV2 = baseResult.GetResult<IEnumerable<CompanyDto>>().Select(c => $"{c.Name} V2");
 
         return Ok(companiesV2);
     }
