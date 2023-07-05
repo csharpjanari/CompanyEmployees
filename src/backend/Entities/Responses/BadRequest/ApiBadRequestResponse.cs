@@ -1,4 +1,4 @@
-namespace Entities.Responses;
+namespace Entities.Responses.BadRequest;
 
 public abstract class ApiBadRequestResponse : ApiBaseResponse
 {
